@@ -13,7 +13,7 @@ function handleFile() {
     formData.append('dataType', dataType);
     formData.append('columnName', columnName);
 
-    const backendUrl = 'https://pipstur.pythonanywhere.com/cluster'; // Replace with your actual backend URL
+    const backendUrl = 'https://pipstur.pythonanywhere.com/api/cluster'; // Replace with your actual backend URL
 
 
     fetch(backendUrl, {
