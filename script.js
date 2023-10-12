@@ -13,7 +13,9 @@ function handleFile() {
     formData.append('dataType', dataType);
     formData.append('columnName', columnName);
 
-    fetch('https://pipstur.pythonanywhere.com/cluster', {
+    const backendUrl = 'https://pipstur.pythonanywhere.com/cluster'; // Replace with your actual backend URL
+
+    fetch(backendUrl, {
         method: 'POST',
         body: JSON.stringify({ data: formData }),
         headers: { 'Content-Type': 'application/json' }
