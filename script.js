@@ -15,6 +15,7 @@ function handleFile() {
 
     const backendUrl = 'https://pipstur.pythonanywhere.com/cluster'; // Replace with your actual backend URL
 
+
     fetch(backendUrl, {
         method: 'POST',
         body: JSON.stringify({ data: formData }),
@@ -25,4 +26,5 @@ function handleFile() {
         // Process the results (e.g., update UI with clustering information)
         console.log('Clustering Result:', data.result);
     });
+
 }
