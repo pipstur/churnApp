@@ -13,7 +13,7 @@ function handleFile() {
     formData.append('dataType', dataType);
     formData.append('columnName', columnName);
 
-    fetch('http://your-backend-url/api/cluster', {
+    fetch('https://pipstur.pythonanywhere.com/cluster', {
         method: 'POST',
         body: JSON.stringify({ data: formData }),
         headers: { 'Content-Type': 'application/json' }
