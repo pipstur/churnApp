@@ -29,7 +29,7 @@ function handleFile() {
                 formData.append('dataType', dataType);
                 formData.append('columnName', columnName);
 
-                const backendUrl = 'https://pipstur.pythonanywhere.com/cluseter';
+                const backendUrl = 'https://pipstur.pythonanywhere.com/cluster';
 
                 fetch(backendUrl, {
                     method: 'POST',
