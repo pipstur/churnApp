@@ -13,32 +13,35 @@ function handleFile() {
             header: true,
             dynamicTyping: true,
             complete: function(results) {
-                // Process the parsed JSON data
+                // Process the parsed JSON data (results.data)
                 console.log('Parsed JSON Data:', results.data);
                 const jsonData = results.data;
 
-                // Display the data
-                displayDataAsTable(jsonData);
+                // Display the data as a table
+                //displayDataAsTable(jsonData);
 
                 const formData = new FormData();
                 formData.append('file', JSON.stringify(jsonData));
 
-                const dataType = 'regular';  // in progress
-                const columnName = 'churn';  // in progress
+                const dataType = 'regular';  // Or 'time_series'
+                const columnName = 'churn';  // Specify the column to be used
 
                 formData.append('dataType', dataType);
                 formData.append('columnName', columnName);
 
+
                 const backendUrl = 'https://pipstur.pythonanywhere.com/cluster';
+                //const backendUrl = 'http://localhost:5000/cluster'; // Replace with your actual backend URL
 
                 fetch(backendUrl, {
                     method: 'POST',
-                    body: formData, 
+                    body: formData,  // Use formData directly
                 })
                 .then(response => response.json())
                 .then(data => {
-                    const resultContainer = document.getElementById('clusteringResult');
-                    //resultContainer.innerText = 'Clustering Result: ' + JSON.stringify(data.result); this does nothing
+                    const clusteringResults = data.result;
+                    console.log('Clustering Results:', clusteringResults); 
+                    displayDataAsTable(jsonData, clusteringResults); 
                 })
                 .catch(error => console.error('Error:', error));
             }
@@ -48,21 +51,27 @@ function handleFile() {
     reader.readAsText(file);
 }
 
-function displayDataAsTable(data) {
+function displayDataAsTable(data, clusteringResults) {
     const dataTable = document.getElementById('dataTable');
 
-    // Clear existing
+    // Clear existing content
     dataTable.innerHTML = '';
 
+    // Add table headers including the clustering header
     const headersRow = document.createElement('tr');
     for (const header in data[0]) {
         const th = document.createElement('th');
         th.textContent = header;
         headersRow.appendChild(th);
     }
+    // Add clustering header
+    const clusteringHeader = document.createElement('th');
+    clusteringHeader.textContent = 'Clustering Result';
+    headersRow.appendChild(clusteringHeader);
+
     dataTable.appendChild(headersRow);
 
-    // 25 rows max displayed
+    // Add data rows (up to 25 rows) including the clustering data
     const numRowsToDisplay = Math.min(25, data.length);
     for (let i = 0; i < numRowsToDisplay; i++) {
         const row = data[i];
@@ -72,6 +81,29 @@ function displayDataAsTable(data) {
             td.textContent = row[header];
             dataRow.appendChild(td);
         }
+        // Add clustering data for each row
+        const clusteringData = document.createElement('td');
+        const clusteringValue = clusteringResults[i] === 0 ? 'No' : 'Yes'; // Map 0 to 'No' and 1 to 'Yes'
+        clusteringData.textContent = clusteringValue;
+        dataRow.appendChild(clusteringData);
+
         dataTable.appendChild(dataRow);
     }
 }
+
+
+
+
+// function fetchAndDisplayGraph() {
+//     const graphImage = document.getElementById('graphImage');
+
+//     fetch('http://localhost:5000/generate_graph')
+//         .then(response => response.blob())
+//         .then(blob => {
+//             const url = URL.createObjectURL(blob);
+//             graphImage.src = url;
+//         })
+//         .catch(error => console.error('Error:', error));
+// }
+
+// document.addEventListener('DOMContentLoaded', fetchAndDisplayGraph);
