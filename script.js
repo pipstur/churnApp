@@ -29,7 +29,7 @@ function handleFile() {
                 formData.append('dataType', dataType);
                 formData.append('columnName', columnName);
 
-                const backendUrl = 'http://localhost:5000/api/cluster'; // Replace with your actual backend URL
+                const backendUrl = 'https://pipstur.pythonanywhere.com/cluseter';
 
                 fetch(backendUrl, {
                     method: 'POST',
