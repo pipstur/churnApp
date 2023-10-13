@@ -4,27 +4,76 @@ function handleFile() {
     const fileInput = document.getElementById('csvFile');
     const file = fileInput.files[0];
 
-    const formData = new FormData();
-    formData.append('file', file);
+    const reader = new FileReader();
 
-    const dataType = 'regular';  // Or 'time_series'
-    const columnName = 'your_column_name';  // Specify the column to be used
+    reader.onload = function(event) {
+        const csvData = event.target.result;
 
-    formData.append('dataType', dataType);
-    formData.append('columnName', columnName);
+        Papa.parse(csvData, {
+            header: true,
+            dynamicTyping: true,
+            complete: function(results) {
+                // Process the parsed JSON data (results.data)
+                console.log('Parsed JSON Data:', results.data);
+                const jsonData = results.data;
 
-    const backendUrl = 'https://pipstur.pythonanywhere.com/api/cluster'; // Replace with your actual backend URL
+                // Display the data as a table
+                displayDataAsTable(jsonData);
 
+                const formData = new FormData();
+                formData.append('file', JSON.stringify(jsonData));
 
-    fetch(backendUrl, {
-        method: 'POST',
-        body: JSON.stringify({ data: formData }),
-        headers: { 'Content-Type': 'application/json' }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Process the results (e.g., update UI with clustering information)
-        console.log('Clustering Result:', data.result);
-    });
+                const dataType = 'regular';  // Or 'time_series'
+                const columnName = 'churn';  // Specify the column to be used
 
+                formData.append('dataType', dataType);
+                formData.append('columnName', columnName);
+
+                const backendUrl = 'http://localhost:5000/api/cluster'; // Replace with your actual backend URL
+
+                fetch(backendUrl, {
+                    method: 'POST',
+                    body: formData,  // Use formData directly
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update the HTML to display the clustering result
+                    const resultContainer = document.getElementById('clusteringResult');
+                    resultContainer.innerText = 'Clustering Result: ' + JSON.stringify(data.result);
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    };
+
+    reader.readAsText(file);
+}
+
+function displayDataAsTable(data) {
+    const dataTable = document.getElementById('dataTable');
+
+    // Clear existing content
+    dataTable.innerHTML = '';
+
+    // Add table headers
+    const headersRow = document.createElement('tr');
+    for (const header in data[0]) {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headersRow.appendChild(th);
+    }
+    dataTable.appendChild(headersRow);
+
+    // Add data rows (up to 25 rows)
+    const numRowsToDisplay = Math.min(25, data.length);
+    for (let i = 0; i < numRowsToDisplay; i++) {
+        const row = data[i];
+        const dataRow = document.createElement('tr');
+        for (const header in row) {
+            const td = document.createElement('td');
+            td.textContent = row[header];
+            dataRow.appendChild(td);
+        }
+        dataTable.appendChild(dataRow);
+    }
 }
