@@ -19,8 +19,8 @@ def cluster_data():
     data = request.form['file']  # Access data from form data
     # Convert the JSON data to a Python dictionary
     data_dict = json.loads(data)
-    
-    # Perform clustering using your unsupervised algorithm (e.g., K-means)
+
+     # Clustering
     result = perform_clustering(data_dict)
     return jsonify({'result': result})
 
