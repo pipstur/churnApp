@@ -39,7 +39,7 @@ function handleFile() {
                 .then(data => {
                     // Update the HTML to display the clustering result
                     const resultContainer = document.getElementById('clusteringResult');
-                    resultContainer.innerText = 'Clustering Result: ' + JSON.stringify(data.result);
+                    //resultContainer.innerText = 'Clustering Result: ' + JSON.stringify(data.result);
                 })
                 .catch(error => console.error('Error:', error));
             }
