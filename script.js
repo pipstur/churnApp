@@ -53,25 +53,22 @@ function handleFile() {
 
 function displayDataAsTable(data, clusteringResults) {
     const dataTable = document.getElementById('dataTable');
-
-    // Clear existing content
     dataTable.innerHTML = '';
 
-    // Add table headers including the clustering header
     const headersRow = document.createElement('tr');
     for (const header in data[0]) {
         const th = document.createElement('th');
         th.textContent = header;
         headersRow.appendChild(th);
     }
-    // Add clustering header
+
     const clusteringHeader = document.createElement('th');
     clusteringHeader.textContent = 'Clustering Result';
+    clusteringHeader.classList.add('clustering-column');  // Apply the CSS class
     headersRow.appendChild(clusteringHeader);
 
     dataTable.appendChild(headersRow);
 
-    // Add data rows (up to 25 rows) including the clustering data
     const numRowsToDisplay = Math.min(25, data.length);
     for (let i = 0; i < numRowsToDisplay; i++) {
         const row = data[i];
@@ -81,10 +78,11 @@ function displayDataAsTable(data, clusteringResults) {
             td.textContent = row[header];
             dataRow.appendChild(td);
         }
-        // Add clustering data for each row
+
         const clusteringData = document.createElement('td');
-        const clusteringValue = clusteringResults[i] === 0 ? 'No' : 'Yes'; // Map 0 to 'No' and 1 to 'Yes'
+        const clusteringValue = clusteringResults[i] === 0 ? 'No' : 'Yes';
         clusteringData.textContent = clusteringValue;
+        clusteringData.classList.add('clustering-column');  // Apply the CSS class
         dataRow.appendChild(clusteringData);
 
         dataTable.appendChild(dataRow);
