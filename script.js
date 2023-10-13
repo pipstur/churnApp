@@ -13,18 +13,18 @@ function handleFile() {
             header: true,
             dynamicTyping: true,
             complete: function(results) {
-                // Process the parsed JSON data (results.data)
+                // Process the parsed JSON data
                 console.log('Parsed JSON Data:', results.data);
                 const jsonData = results.data;
 
-                // Display the data as a table
+                // Display the data
                 displayDataAsTable(jsonData);
 
                 const formData = new FormData();
                 formData.append('file', JSON.stringify(jsonData));
 
-                const dataType = 'regular';  // Or 'time_series'
-                const columnName = 'churn';  // Specify the column to be used
+                const dataType = 'regular';  // in progress
+                const columnName = 'churn';  // in progress
 
                 formData.append('dataType', dataType);
                 formData.append('columnName', columnName);
@@ -33,13 +33,12 @@ function handleFile() {
 
                 fetch(backendUrl, {
                     method: 'POST',
-                    body: formData,  // Use formData directly
+                    body: formData, 
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Update the HTML to display the clustering result
                     const resultContainer = document.getElementById('clusteringResult');
-                    //resultContainer.innerText = 'Clustering Result: ' + JSON.stringify(data.result);
+                    //resultContainer.innerText = 'Clustering Result: ' + JSON.stringify(data.result); this does nothing
                 })
                 .catch(error => console.error('Error:', error));
             }
@@ -52,10 +51,9 @@ function handleFile() {
 function displayDataAsTable(data) {
     const dataTable = document.getElementById('dataTable');
 
-    // Clear existing content
+    // Clear existing
     dataTable.innerHTML = '';
 
-    // Add table headers
     const headersRow = document.createElement('tr');
     for (const header in data[0]) {
         const th = document.createElement('th');
@@ -64,7 +62,7 @@ function displayDataAsTable(data) {
     }
     dataTable.appendChild(headersRow);
 
-    // Add data rows (up to 25 rows)
+    // 25 rows max displayed
     const numRowsToDisplay = Math.min(25, data.length);
     for (let i = 0; i < numRowsToDisplay; i++) {
         const row = data[i];
