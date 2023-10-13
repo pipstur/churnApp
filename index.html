@@ -1,13 +1,24 @@
-<!-- index.html -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Display</title>
+</head>
+<body>
+    <input type="file" id="csvFile" accept=".csv">
+    <button onclick="handleFile()">Process Data</button>
 
-<input type="file" id="csvFile" accept=".csv">
-<button onclick="handleFile()">Process Data</button>
+    <table id="dataTable" border="1">
+        <!-- Table headers will be added dynamically -->
+    </table>
 
-<script src="script.js"></script>
+    <div id="graphContainer">
+        <h2>Generated Graph</h2>
+        <img id="graphImage" src="" alt="Generated Graph">
+    </div>
 
-<!-- <div id="clusteringResult"></div> -->
-
-<table id="dataTable" border="1">
-    
-</table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
